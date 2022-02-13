@@ -1,3 +1,4 @@
+from re import template
 import rumps
 import getpass
 import os
@@ -25,7 +26,7 @@ def check_files():
 
 class BarNotes(rumps.App):
     def __init__(self):
-        super(BarNotes, self).__init__("BarNotes", title="  " + Note.get_note(), icon=f"/users/{user_name}/Library/Application Support/BarNotes/icon.png")
+        super(BarNotes, self).__init__("BarNotes", title="  " + Note.get_note(), icon=f"/users/{user_name}/Library/Application Support/BarNotes/icon.png", template=True)
         
         self.logger = Logger()
         self.logger.log("BarNotes initialized")
