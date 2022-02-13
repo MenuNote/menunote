@@ -1,28 +1,11 @@
-from re import template
 import rumps
 import getpass
-import os
-import requests
 
 from utils.logger import Logger
 from utils.note import Note
+from utils.filecheck import check_files
 
 user_name = getpass.getuser()
-
-def check_files():
-    files = [
-        "https://raw.githubusercontent.com/bentettmar/barnotes/main/data/icon.png",
-        "https://raw.githubusercontent.com/bentettmar/barnotes/main/data/note.txt"
-    ]
-
-    if not os.path.exists(os.path.expanduser("~/Library/Application Support/BarNotes")):
-        os.makedirs(os.path.expanduser("~/Library/Application Support/BarNotes"))
-
-    for file in files:
-        if not os.path.exists(os.path.expanduser(f"~/Library/Application Support/BarNotes/{file.split('/')[-1]}")):
-            r = requests.get(file)
-            with open(os.path.expanduser(f"~/Library/Application Support/BarNotes/{file.split('/')[-1]}"), "wb") as f:
-                f.write(r.content)
 
 class BarNotes(rumps.App):
     def __init__(self):
