@@ -1,12 +1,14 @@
-from .resourcePath import resource_path
+import getpass
+
+user_name = getpass.getuser()
 
 class Note:
     def get_note():
-        return open("data/note.txt").read()
+        return open(f"/users/{user_name}/Library/Application Support/BarNotes/note.txt").read()
 
     def set_note(note):
         if note == "":
-            note = "default note"
+            note = "Bar Notes"
         note = note[:100]
-        with open("data/note.txt", "w") as f:
+        with open(f"/users/{user_name}/Library/Application Support/BarNotes/note.txt", "w") as f:
             f.write(note)
