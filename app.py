@@ -1,25 +1,42 @@
 import rumps
-import sys
-import threading
+import getpass
+import os
+import requests
 
 from utils.logger import Logger
 from utils.note import Note
-from utils.resourcePath import resource_path
+
+user_name = getpass.getuser()
+
+def check_files():
+    files = [
+        "https://raw.githubusercontent.com/bentettmar/barnotes/main/data/icon.png",
+        "https://raw.githubusercontent.com/bentettmar/barnotes/main/data/note.txt"
+    ]
+
+    if not os.path.exists(os.path.expanduser("~/Library/Application Support/BarNotes")):
+        os.makedirs(os.path.expanduser("~/Library/Application Support/BarNotes"))
+
+    for file in files:
+        if not os.path.exists(os.path.expanduser(f"~/Library/Application Support/BarNotes/{file.split('/')[-1]}")):
+            r = requests.get(file)
+            with open(os.path.expanduser(f"~/Library/Application Support/BarNotes/{file.split('/')[-1]}"), "wb") as f:
+                f.write(r.content)
 
 class BarNotes(rumps.App):
     def __init__(self):
-        super(BarNotes, self).__init__("BarNotes", title="  " + Note.get_note(), icon="data/icon.png", quit_button=None)
+        super(BarNotes, self).__init__("BarNotes", title="  " + Note.get_note(), icon=f"/users/{user_name}/Library/Application Support/BarNotes/icon.png")
         
         self.logger = Logger()
         self.logger.log("BarNotes initialized")
 
-        self.menu = ["Edit Note", "Quit"]
+        self.menu = ["Edit Note"]
 
     @rumps.clicked("Edit Note")
     def edit(self, _):
         window = rumps.Window(title="Edit your note", message="The max amount of characters is 100.", dimensions=(300, 85), ok="Save", cancel="Cancel")
         window.default_text = Note.get_note()
-        window.icon = "data/icon.png"
+        window.icon = f"/users/{user_name}/Library/Application Support/BarNotes/icon.png"
 
         self.logger.log("Edit Note window opened")
 
@@ -31,16 +48,11 @@ class BarNotes(rumps.App):
         elif response.clicked == 0:
             self.logger.log("Note was not changed")
 
-    @rumps.clicked("Quit")
-    def close(self, _):
-        self.logger.log("BarNotes quit")
-        self.logger.close()
-        rumps.quit_application()
-
     def start(self):
         self.logger.log("BarNotes running")
         self.run()
 
 if __name__ == "__main__":
+    check_files()
     app = BarNotes()
     app.start()
