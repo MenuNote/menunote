@@ -1,5 +1,5 @@
-# BarNotes
-A note app that uses the menu bar on Mac OS.  
+# Menu Note
+A note taking app that uses the menu bar on Mac OS.  
 Great for reminding yourself, view examples [here](https://github.com/bentettmar/barnotes/tree/main/examples)!
 
 > ### How to use
